@@ -2,8 +2,9 @@ export PATH:=$(abspath bin):$(PATH)
 EASYFLASH ?= 0
 EXOMIZER ?= 0
 AUTOMATION ?= 0
-DEFAULT_DRIVER ?= 0
-DEFAULT_BAUDRATE ?= 2400
+# driver 2 = swiftlink DE
+DEFAULT_DRIVER ?= 2
+DEFAULT_BAUDRATE ?= 9600
 
 EXO_PATH := build/bin/exomizer
 EXO_ARGS := sfx sys -q -n -T4 -M256 -Di_perf=2
