@@ -48,7 +48,8 @@ build/rs232.lib: rs232lib/c64.inc rs232lib/rs232.inc rs232lib/rs232_kernal.inc r
 	ca65 -g rs232lib/rs232_userport.s -o build/rs232_userport.o
 	ca65 -g rs232lib/rs232_up9600.s -o build/rs232_up9600.o
 	ca65 -g rs232lib/rs232_swiftlink.s -o build/rs232_swiftlink.o
-	ar65 a build/rs232.lib build/rs232.o build/rs232_userport.o build/rs232_up9600.o build/rs232_swiftlink.o
+	ca65 -g rs232lib/rs232_chat64.s -o build/rs232_chat64.o
+	ar65 a build/rs232.lib build/rs232.o build/rs232_userport.o build/rs232_up9600.o build/rs232_swiftlink.o build/rs232_chat64.o
 
 build/disk.d64:
 	c1541 -format ccgms,fu d64 build/disk.d64

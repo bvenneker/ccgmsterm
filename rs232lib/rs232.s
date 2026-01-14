@@ -13,7 +13,7 @@
 .import modem_type, baud_rate, is_pal_system
 
 ; drivers
-.import rsuser_funcs, up9600_funcs, sw_funcs
+.import rsuser_funcs, up9600_funcs, sw_funcs, chat64_funcs
 .export rs232_rti
 
 tmpzp		= $a7	; reused KERNAL RS-232 driver var
@@ -25,7 +25,9 @@ ram_flag	= $f9	; reused KERNAL RS-232 driver var
 ; Dispatch: Init modem
 rs232_init:
 	jsr setup_ram_irq_nmi
-
+	lda modem_type
+	cmp #MODEM_TYPE_CHAT64
+	beq :+
 	ldx #MODEM_TYPE_SWIFTLINK_DE
 	lda modem_type
 	cmp #MODEM_TYPE_SWIFTLINK_DE
@@ -74,9 +76,12 @@ func_dropdtr:
 	.res 6*2
 
 modem_drivers:
-	.word rsuser_funcs	; MODEM_TYPE_USERPORT
-	.word up9600_funcs	; MODEM_TYPE_UP9600
-	.word sw_funcs		; MODEM_TYPE_SWIFTLINK_DE, ...
+	.word rsuser_funcs  ; MODEM_TYPE_USERPORT
+	.word up9600_funcs  ; MODEM_TYPE_UP9600
+	.word sw_funcs      ; MODEM_TYPE_SWIFTLINK_DE, DF, D7
+	.word 0             ; Empty slot (would be swiftlink_DF but that uses sw_funcs too)
+	.word 0             ; Empty slot (would be swiftlink_D7 but that uses sw_funcs too)
+	.word chat64_funcs  ; MODEM_TYPE_CHAT64
 
 ;----------------------------------------------------------------------
 ; Dispatch: Enable
