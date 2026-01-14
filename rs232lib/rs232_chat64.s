@@ -40,6 +40,7 @@ sw_funcs:
 ;----------------------------------------------------------------------
 ; new NMI handler
 nmisw:
+    jmp rs232_rti ; disable for now
 	pha
 	txa
 	pha
@@ -69,7 +70,8 @@ sm5:	lda sw_cmd
 	and #%11111101	; re-enable receive interrupt
 sm6:	sta sw_cmd
 	clc
-recch1:	pla
+recch1:	
+    pla
 	tay
 	pla
 	tax
@@ -115,87 +117,9 @@ sm15:	sta sw_cmd
 ; A: modem_type
 ; X: baud_rate
 sw_setup:
-
   lda #126
   sta $DE00
   rts
-; set SwiftLink address by modifying all access code
-	cmp #MODEM_TYPE_SWIFTLINK_DE
-	beq @de
-	cmp #MODEM_TYPE_SWIFTLINK_DF
-	beq @df
-	lda #$d7	; else MODEM_TYPE_SWIFTLINK_D7
-	bne @cont
-@de:	lda #$de
-	bne @cont
-@df:	lda #$df
-@cont:	sta sm1+2
-	sta sm2+2
-	sta sm3+2
-	sta sm4+2
-	sta sm5+2
-	sta sm6+2
-	sta sm7+2
-	sta sm8+2
-	sta sm9+2
-	sta sm10+2
-	sta sm11+2
-	sta sm12+2
-	sta sm13+2
-	sta sm14+2
-	sta sm15+2
-	sta sm16+2
-	sta sm17+2
-	sta sm18+2
-	sta sm19+2
-	sta sm20+2
-	sta sm21+2
-	sta sm22+2
-	sta sm23+2
-	sta sm24+2
-	sta sm25+2
-
-	sei
-;             .------------------------- parity control,
-;             :.------------------------ bits 5-7
-;             ::.----------------------- 000 = no parity
-;             :::
-;             :::.------------------- echo mode, 0 = normal (no echo)
-;             ::::
-;             ::::.----------- transmit interrupt control, bits 2-3
-;             :::::.---------- 10 = xmit interrupt off, RTS low
-;             ::::::
-;             ::::::.------ receive interrupt control, 0 = enabled
-;             :::::::
-;             :::::::.--- DTR control, 1=DTR low
-	lda #%00001001
-sm16:	sta sw_cmd
-;             .------------------------- 0 = one stop bit
-;             :
-;             :.-------------------- word length, bits 6-7
-;             ::.------------------- 00 = eight-bit word
-;             :::
-;             :::.------------- clock source, 1 = internal generator
-;             ::::
-;             ::::.----- baud
-;             :::::.---- rate
-;             ::::::.--- bits   ;1010 == 4800 baud, changes later
-;             :::::::.-- 0-3
-	lda #%00010000
-sm17:	sta sw_ctrl
-
-sm18:	lda sw_ctrl
-	and #$f0
-	ora swbaud,x	; baud_rate
-sm19:	sta sw_ctrl
-
-	lda #<nmisw
-	ldx #>nmisw
-	sta $0318 ; NMINV
-	stx $0319
-
-	cli
-	rts
 
 ;----------------------------------------------------------------------
 sw_putxfer:
