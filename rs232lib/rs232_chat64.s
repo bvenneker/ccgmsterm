@@ -29,23 +29,30 @@ chat64_funcs:
 
 ;----------------------------------------------------------------------
 ; new NMI handler
+; On chat64 NMI is triggered when there is a new byte in the output buffer
+; of the cartridge.
+; Collect that byte from the cartridge and put them in the buffer
+
 chat64_NMI:
-    ; your code here ;)
+	
+	inc $d020
+	lda #70
+	ldx rtail
+	sta ribuf,x
+
+	inc rtail
+
     jmp rs232_rti ; 
 
 ;----------------------------------------------------------------------
 chat64_setup:
-  inc $d020
-  jmp chat64_setup
+  
   ; setup NMI
   lda #<chat64_NMI
   ldx #>chat64_NMI
   sta $0318  
   stx $0319
 
-	
-  ;lda #126
-  ;sta cartridge
   rts
   
 ;----------------------------------------------------------------------
@@ -60,18 +67,31 @@ chat64_disable:
 	
 
 ;----------------------------------------------------------------------
+; Read a byte from the tail of the buffer
+; tail position: rtail
+; buffer: ribuf
+; put the result in A
+;----------------------------------------------------------------------
 chat64_getxfer:
 	
-  rts
+	ldx rhead   ; skip if head is equal to tail
+	cpx rtail
+	beq :+		; skip (empty buffer, return with carry set)
+	lda ribuf,x
+	pha
+	inc rhead
+	clc
+	pla
+:   rts
   
 ;----------------------------------------------------------------------
 chat64_putxfer:
-
+    inc $d020
 	rts
 
 ;----------------------------------------------------------------------
 chat64_dropdtr:
-
+    
 	rts
 
 
