@@ -3,7 +3,7 @@
 ; Copyright (c) 2016,2022, Craig Smith, alwyz, Michael Steil. All rights reserved.
 ; This project is licensed under the BSD 3-Clause License.
 ;
-; RS232 Driver Dispatch
+; RS232 Driver Dispatch 
 ;
 
 .include "rs232_kernal.inc"
@@ -26,14 +26,7 @@ ram_flag	= $f9	; reused KERNAL RS-232 driver var
 rs232_init:
 	jsr setup_ram_irq_nmi
 	lda modem_type
-	cmp #MODEM_TYPE_CHAT64
-	beq :+
-	ldx #MODEM_TYPE_SWIFTLINK_DE
-	lda modem_type
-	cmp #MODEM_TYPE_SWIFTLINK_DE
-	bcc :+
-	txa
-:	asl
+	asl
 	tax
 	lda modem_drivers,x
 	sta tmpzp
