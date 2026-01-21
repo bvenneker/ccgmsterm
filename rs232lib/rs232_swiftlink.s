@@ -114,11 +114,7 @@ sm15:	sta sw_cmd
 ;----------------------------------------------------------------------
 ; A: modem_type
 ; X: baud_rate
-sw_setup:
-
-  lda #126
-  sta $DE00
-  rts
+sw_setup:    
 ; set SwiftLink address by modifying all access code
 	cmp #MODEM_TYPE_SWIFTLINK_DE
 	beq @de

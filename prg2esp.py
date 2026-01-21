@@ -17,7 +17,7 @@ import re
 n = len(sys.argv)
 inputfile= "/home/bart/GitHub/ccgmsterm/build/ccgmsterm.prg"
 outfolder = "/home/bart/Dropbox/C64 Chat/WiFi_Modem_CHAT64/C64_Chat_400"
-outputfile = outfolder + "/prgfile.h"
+outputfile = outfolder + "/prgfile_m.h"
 
 print("-----------------------------------------------")
 print("> input    : " + inputfile)
@@ -28,7 +28,7 @@ print("> converting " + inputfile +" to hex array as :" + outputfile)
 
 strArray="// array size is " + str(os.path.getsize(inputfile)) + ". " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M") + "\n"
 
-strArray+="static const byte prgfile[] PROGMEM  = {\n"
+strArray+="static const byte prgfile_m[] PROGMEM  = {\n"
 c=0
 with open(inputfile, "rb") as f:
 	while (byte := f.read(1)):
