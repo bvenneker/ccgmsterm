@@ -199,10 +199,69 @@ clren1
 	lda curpik
 	cmp #30
 	bcc clren1
-	jmp phonebook_init; [XXX remove]
+	
+	
 
+  
+  
+  
+	jmp phonebook_init; [XXX remove]
+text: .byte 0,6
+      .byte "8bit.hoyvision    "
+	  .byte "8bit.hoyvision.com              ",0
+	  .byte "6502 ",0
+	  .byte "           ",0
+	  .byte "           ",0
 ;----------------------------------------------------------------------
+loadSpeedDials:
+  inc $d020
+  
+  ; safe zero page addresses.
+  lda $FB
+  pha
+  lda $FC
+  pha
+  lda $FD 
+  pha
+  lda $FE
+  pha
+  
+  ; send command to cartridge 251,252,251
+  
+  ; receive 830 bytes
+  
+  lda #<text
+  sta $FB
+  lda #>text
+  sta $FC
+  
+  lda #<(phbmem)
+  sta $FD
+  lda #>(phbmem)
+  sta $FE
+  ldy #0  
+copy_loop:
+  lda ($FB),y
+  sta ($FD),y
+  iny
+  cpy #83
+  bne copy_loop
+  
+  
+  ; restore zero page addresses
+  pla
+  sta $FE
+  pla
+  sta $FD
+  pla
+  sta $FC
+  pla
+  sta $FB  
+  rts
+  
+  
 phonebook_init:
+    jsr loadSpeedDials
 	lda #'0'
 	sta trycnt
 	sta trycnt+1

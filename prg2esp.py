@@ -15,8 +15,12 @@ import datetime
 import re
 
 n = len(sys.argv)
-inputfile= "/home/bart/GitHub/ccgmsterm/build/ccgmsterm.prg"
-outfolder = "/home/bart/Dropbox/C64 Chat/WiFi_Modem_CHAT64/C64_Chat_400"
+#inputfile= "/home/bart/GitHub/ccgmsterm/build/ccgmsterm.prg"
+#outfolder = "/home/bart/Dropbox/C64 Chat/WiFi_Modem_CHAT64/C64_Chat_400"
+
+inputfile= "C:/Users/bvenn/Documents/GitHub/ccgmsterm/build/ccgmsterm.prg"
+outfolder = "C:/Users/bvenn/Dropbox/C64 Chat/WiFi_Modem_CHAT64/C64_Chat_400"
+
 outputfile = outfolder + "/prgfile_m.h"
 
 print("-----------------------------------------------")

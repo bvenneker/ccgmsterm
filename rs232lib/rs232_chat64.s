@@ -15,7 +15,8 @@
 
 ; Chat64 registers
 cartridge_out  = $DE00                               
-cartridge_in   = $DF00                               
+cartridge_in   = $DF00   
+phonebook = $42F8                            
 
 .segment "RS232"
 ;----------------------------------------------------------------------
@@ -62,23 +63,22 @@ bufferfull:
 ;----------------------------------------------------------------------
 chat64_setup:
   ; setup NMI
+  
   lda #<chat64_NMI
   ldx #>chat64_NMI
   sta $0318 
   stx $0319
 
+ 
+  
   rts
+
+
  
 ;----------------------------------------------------------------------
 chat64_enable:
   rts
-  ; setup NMI
-  lda #<chat64_NMI
-  ldx #>chat64_NMI
-  sta $0318 
-  stx $0319
-  
-  rts
+
  
 ;----------------------------------------------------------------------
 chat64_disable:
