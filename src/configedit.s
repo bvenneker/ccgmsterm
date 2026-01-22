@@ -142,6 +142,8 @@ f7chgk
 @no6:
 
 ; M: modem type
+
+    jmp @no7    ; changing Modem is disabled by Chat64
 	cmp #'M'
 	bne @no7
 
