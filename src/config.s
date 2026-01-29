@@ -66,16 +66,16 @@ SET_PETSCII
 	;.byte "MYID       ",0
 	;.byte "MYPASSWORD1",0
 
-	.repeat 29
+	.repeat 30
 	.res 83,0	; empty entry
 	.endrep
 
-	.byte 0,6
-	.byte "Commodoreserver   "
-	.byte "commodoreserver.com",0,CR,0,0,0,0,0,0,0,0,0,0,0,0
-	.byte "1541",0,13
-	.byte "id         ",0
-	.byte "pin        ",0
+	;.byte 0,6
+	;.byte "Commodoreserver   "
+	;.byte "commodoreserver.com",0,CR,0,0,0,0,0,0,0,0,0,0,0,0
+	;.byte "1541",0,13
+	;.byte "id         ",0
+	;.byte "pin        ",0
 	.byte 0,0
 
 ;----------------------------------------------------------------------

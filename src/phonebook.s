@@ -31,7 +31,7 @@ txt_phonebook_menu:
 	.byte HILITE
 	.byte "a-Dial Selected"
 	.byte CR,HILITE
-	.byte "reverse Call     "
+	.byte "save phonebook   "
 	.byte HILITE
 	.byte "x-Return To Menu"
 	.byte CR
@@ -98,6 +98,8 @@ curpik	.byte 0
 tmppik	.byte 0
 bautmp	.byte 6
 gratmp	.byte 0
+
+
 
 prtstt
 	pha
@@ -199,69 +201,154 @@ clren1
 	lda curpik
 	cmp #30
 	bcc clren1
-	
-	
+    
+	jmp phonebook_init
 
-  
-  
-  
-	jmp phonebook_init; [XXX remove]
-text: .byte 0,6
-      .byte "8bit.hoyvision    "
-	  .byte "8bit.hoyvision.com              ",0
-	  .byte "6502 ",0
-	  .byte "           ",0
-	  .byte "           ",0
 ;----------------------------------------------------------------------
-loadSpeedDials:
-  inc $d020
+; save phonebook entries to cartridge memory
+;----------------------------------------------------------------------
+savePhonebook:
+  ; send command to cartridge 253, 251, 246
+  lda #253
+  jsr rs232_put
+  lda #251
+  jsr rs232_put
+  lda #246
+  jsr rs232_put
   
-  ; safe zero page addresses.
-  lda $FB
+  lda #0         
+nextEntry:  
   pha
-  lda $FC
-  pha
-  lda $FD 
-  pha
-  lda $FE
-  pha
-  
-  ; send command to cartridge 251,252,251
-  
-  ; receive 830 bytes
-  
-  lda #<text
-  sta $FB
-  lda #>text
-  sta $FC
-  
-  lda #<(phbmem)
-  sta $FD
-  lda #>(phbmem)
-  sta $FE
-  ldy #0  
-copy_loop:
-  lda ($FB),y
-  sta ($FD),y
+  jsr entryUsed
+  cmp #1
+  bne skip
+  pla
+  pha  
+  jsr rs232_put
+  ldy #0
+sendNextByte:  
+  lda ($FD),y
+  jsr rs232_put
   iny
   cpy #83
-  bne copy_loop
+  bne sendNextByte
+skip:
+  pla
+  clc
+  adc #1
+  cmp #30  
+  bne nextEntry
   
+  lda #99
+  jsr rs232_put
   
-  ; restore zero page addresses
-  pla
-  sta $FE
-  pla
-  sta $FD
-  pla
-  sta $FC
-  pla
-  sta $FB  
+  rts
+
+;----------------------------------------------------------------------
+; is phonebook entry occupied?
+; A = entry number (0..29)
+; returns in A, 1 or 0
+;----------------------------------------------------------------------
+entryUsed:
+  jsr calc_entry_addr ; get the address of the entry
+  ldy #2              ; skip first two bytes (0 and 6)
+  lda ($FD),y         ; load this character of entry name
+  cmp #0              ; compare with empty space
+  beq exit_eu
+  lda #1
+exit_eu:
+  rts
+
+;----------------------------------------------------------------------
+; Load phone book entries from cartridge memory
+;----------------------------------------------------------------------
+phonebookDone: .byte 0
+
+loadSpeedDials:
+  lda phonebookDone
+  cmp #0
+  beq contLoad
+  rts
+contLoad:
+  lda #1
+  sta phonebookDone
+  
+  ; send command to cartridge 253, 251, 245
+  lda #253
+  jsr rs232_put
+  lda #251
+  jsr rs232_put
+  lda #245
+  jsr rs232_put
+      
+waitSTX:              ; look for the stx symbol in the buffer (stx=ascii value 2)
+  jsr rs232WaitGet
+  cmp #2
+  bne waitSTX         ; byte not equal to 2
+readEntryNr:
+  jsr rs232WaitGet    ; after this, the entry number is in A
+  cmp #99             ; 99 means there are no more entries, we are done
+  beq exit_load_pb
+  jsr calc_entry_addr ; calculate the address based on the entry number
+  ldy #0              ; use y as index  
+readNextByte:         ; read until etx (etx=ascii value 3)
+  jsr rs232WaitGet
+  cmp #3
+  beq waitSTX
+  sta ($FD),y
+  iny
+  cpy #85             ; this can not happen, must be an error, bail!
+  beq exit_load_pb
+  jmp readNextByte  
+
+exit_load_pb:  
   rts
   
-  
-phonebook_init:
-    jsr loadSpeedDials
+;---------------------------------------------------------------------------
+; Wait and get. A procedure to wait for the next byte and return it
+;---------------------------------------------------------------------------
+rs232WaitGet:
+  jsr rs232_get
+  bcs rs232WaitGet   ; buffer is empty
+  rts
+
+;---------------------------------------------------------------------------    
+
+; ----------------------------------------
+; Calculate the phonebook entry address
+; Input : A = entry number (0..29)
+; Base  : phbmem = phonebook start
+; Output: $FD/$FE = entry start address
+; ----------------------------------------
+
+calc_entry_addr:
+        ; copy base address to FD/FE
+        pha
+        lda #<phbmem
+        sta $FD
+        lda #>phbmem
+        sta $FE
+        pla
+        tax                 ; X = entry count
+        beq done            ; entry 0 = base
+
+loop:
+        clc
+        lda $FD
+        adc #83
+        sta $FD
+        bcc :+
+        inc $FE
+:
+        dex
+        bne loop
+
+done:
+        rts
+        
+;---------------------------------------------------------------------------           
+phonebook_init:   
+    jsr loadSpeedDials 
 	lda #'0'
 	sta trycnt
 	sta trycnt+1
@@ -932,12 +1019,12 @@ phb5:
 	jmp phonebook_loop
 @9:
 
-	cmp #'R'
+	cmp #'S'
 	bne @10
 
-; reverse call
-	jsr xorall
-	jsr phonebook_init
+; save phonebook
+	jsr savePhonebook	
+    jmp phbget
 	jmp phonebook_loop
 @10:
 

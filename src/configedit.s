@@ -108,6 +108,7 @@ f7chgk
 @no3:
 
 ; F: Firmware
+    jmp @no4
 	cmp #'F'
 	bne @no4
 
@@ -169,6 +170,7 @@ f7chgk
 @no7:
 
 ; P: Protocol
+    jmp @no8
 	cmp #'P'
 	bne @no8
 
@@ -182,6 +184,7 @@ f7chgk
 @no8:
 
 ; S: save
+    jmp @no9
 	cmp #'S'
 	bne @no9
 	jsr save_config
@@ -189,6 +192,7 @@ f7chgk
 @no9:
 
 ; L: load
+    jmp @no10
 	cmp #'L'
 	bne @no10
 	jsr load_config
@@ -196,6 +200,7 @@ f7chgk
 @no10:
 
 ; E: edit macros
+    jmp @no11
 	cmp #'E'
 	bne @no11
 	jsr edtmac
@@ -322,7 +327,7 @@ f7parm:
 	dey
 	bne :-
 	jsr prmclc
-	lda baud_rate
+	lda #6 ;baud_rate
 	asl a
 	tax
 	lda baudrates+1,x
@@ -385,23 +390,23 @@ txt_settings_menu:
 	.byte CR,WHITE,16
 tcol27a	.byte WHITE
 	.byte " ",HILITE,"auto-Dialer/Phonebook",CR,CR
-	.byte " ",HILITE,"baud Rate   -",CR,CR
-	.byte " ",HILITE,"duplex      -",CR,CR
-	.byte " ",HILITE,"modem Type  -",CR,CR
-	.byte " ",HILITE,"f"
+	.byte " ",WHITE,"baud Rate   -",CR,CR
+	.byte " ",WHITE,"duplex      -",CR,CR
+	.byte " ",WHITE,"modem Type  -",CR,CR
+	.byte " ",WHITE,"f"
 tcol27b	.byte " "
 	.byte "irmware    -",CR,CR
-	.byte " ",HILITE,"protocol    -",CR,CR
+	.byte " ",WHITE,"protocol    -",CR,CR
 	.byte " ",HILITE,"theme       -",CR,CR,0
 
 txt_edit_macros:
-	.byte " ",HILITE,"edit Macros",CR,CR,0
+	.byte " ",BLACK,"edit Macros",CR,CR,WHITE,0
 txt_edit_macros_cfg_device:
 	.byte " ",HILITE,"edit Macros   ",HILITE,"cfg Device -",CR,CR,0
 
 txt_load_save_config:
-	.byte " ",HILITE,"load/",HILITE,"save Phone Book and Config.",CR,CR
-	.byte " ",HILITE,"view Instructions",CR,CR,0
+	.byte " ",BLACK,"load/",BLACK,"save Phone Book and Config.",CR,CR
+	.byte " ",WHITE,HILITE,"view Instructions",CR,CR,0
 
 txt_press_return_to_abort:
 	.byte SETCSR,22,0,WHITE,"Press <",YELLOW,RVSON,"RETURN",RVSOFF,WHITE,"> to abort.",CR,0
