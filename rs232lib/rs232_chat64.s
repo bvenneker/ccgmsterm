@@ -50,8 +50,8 @@ chat64_NMI:
         lda cartridge_in ; load a byte from the cartridge
         sta ribuf,x      ; write the byte to the buffer, with x as index
         inc rtail        ; increase tail for next round
- 
-bufferfull:       
+         
+bufferfull:  
         pla
         tay
         pla

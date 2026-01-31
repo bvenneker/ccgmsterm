@@ -1421,7 +1421,7 @@ haybk2
 
 ;----------------------------------------------------------------------
 hayes_connected:
-	jsr flush_modem
+    jsr flush_modem
 	lda #CONSTAT_CONNECT
 	sta connection_status
 	jmp dalfin
@@ -1524,6 +1524,11 @@ haybus3
 	cpy #$ff
 	jeq hayout	; get out of routine. send data to terminal, and set connect!
 	jsr hrs232_get
+    cmp #'C'
+    bne :+
+    jmp hayes_connected
+:	jsr buffer_input
+    jsr hrs232_get
 	cmp #'b'
 	bne haynocarr	; move to check for no carrier
 	jsr buffer_input
@@ -1568,8 +1573,9 @@ haynocarr
 	jsr buffer_input
 	jsr hrs232_get
 	cmp #'r'
-	bne haybus3
-	ldy #0
+    beq :+
+	jmp haybus3
+:	ldy #0
 	sty bustemp
 	jmp hayes_no_carrier
 ;
@@ -1677,7 +1683,7 @@ hayout
 hrs232_get:
 	inc waittemp	; timeout for no character loop
 	ldx waittemp	; so it doesn't lock up
-	cpx #144	; maybe change for various baud rates
+	cpx #144	    ; maybe change for various baud rates
 	beq :+
 	jsr rs232_get
 	beq hrs232_get
