@@ -148,6 +148,18 @@ f7chgk
 	cmp #'M'
 	bne @no7
 
+; return to basic
+        
+  jsr $a642
+  lda #7
+  sta $d020
+  lda #14
+  sta $d021
+  jsr $E518
+  jmp $A483
+    
+
+
 	inc modem_type
 	lda modem_type
 	pha
@@ -170,7 +182,7 @@ f7chgk
 @no7:
 
 ; P: Protocol
-    jmp @no8
+    ;jmp @no8
 	cmp #'P'
 	bne @no8
 
@@ -396,7 +408,7 @@ tcol27a	.byte WHITE
 	.byte " ",WHITE,"f"
 tcol27b	.byte " "
 	.byte "irmware    -",CR,CR
-	.byte " ",WHITE,"protocol    -",CR,CR
+	.byte " ",HILITE,"protocol    -",CR,CR
 	.byte " ",HILITE,"theme       -",CR,CR,0
 
 txt_edit_macros:
