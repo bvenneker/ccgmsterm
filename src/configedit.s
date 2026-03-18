@@ -197,18 +197,18 @@ f7chgk
 
 ; S: save
     jmp @no9
-	cmp #'S'
-	bne @no9
-	jsr save_config
-	jmp handle_f7_config
+;	cmp #'S'
+;	bne @no9
+;	jsr save_config
+;	jmp handle_f7_config
 @no9:
 
 ; L: load
     jmp @no10
-	cmp #'L'
-	bne @no10
-	jsr load_config
-	jmp handle_f7_config
+;	cmp #'L'
+;	bne @no10
+;	jsr load_config
+;	jmp handle_f7_config
 @no10:
 
 ; E: edit macros

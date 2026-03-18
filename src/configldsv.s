@@ -81,6 +81,7 @@ load_config:
 
 ;----------------------------------------------------------------------
 load_config_file:
+    rts
 	ldx #<config_data
 	ldy #>config_data
 	lda #0		; load

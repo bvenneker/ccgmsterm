@@ -141,24 +141,27 @@ init
 	sta half_duplex	; full duplex
 	lda #$93
 	jsr chrout	; clear screen
-	lda config_file_loaded; already loaded config file?
-	bne @noload
-	lda drive_present
-	beq @noload	; no drive exists
+    
+    ; Do not load config at startup:
+    ; jmp @noload
+	;lda config_file_loaded; already loaded config file?
+	;bne @noload
+	;lda drive_present
+	;beq @noload	; no drive exists
 
 ; load config file from disk
-	jsr rs232_off
-	lda #1
-	sta config_file_loaded
-	ldx #<filename_config
-	ldy #>filename_config
-	lda #11
-	jsr setnam
-	lda #2
-	ldx device_disk
-	ldy #0
-	jsr setlfs
-	jsr load_config_file
+	;jsr rs232_off
+	;lda #1
+	;sta config_file_loaded
+	;ldx #<filename_config
+	;ldy #>filename_config
+	;lda #11
+	;jsr setnam
+	;lda #2
+	;ldx device_disk
+	;ldy #0
+	;jsr setlfs
+	;jsr load_config_file
 
 @noload:
 	jmp term_entry_first
