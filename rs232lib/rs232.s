@@ -1,6 +1,7 @@
 ; CCGMS Terminal
 ;
 ; Copyright (c) 2016,2022, Craig Smith, alwyz, Michael Steil. All rights reserved.
+; Changes for Commodore by Bart Venneker and Theo van den Beld, 2026
 ; This project is licensed under the BSD 3-Clause License.
 ;
 ; RS232 Driver Dispatch 
@@ -128,7 +129,23 @@ rs232_put:
 
 ;----------------------------------------------------------------------
 ; Dispatch: Hang up
-rs232_dropdtr	= func_dropdtr
+;rs232_dropdtr	= func_dropdtr
+rs232_dropdtr:
+   ; send command to cartridge  0xF1, 0xF2, 0xF3, 0xF4 
+  lda #241
+  jsr rs232_put
+  jsr delay100
+  lda #242
+  jsr rs232_put
+  jsr delay100
+  lda #243
+  jsr rs232_put
+  jsr delay100
+  lda #244
+  jsr rs232_put
+  rts
+
+
 
 ;----------------------------------------------------------------------
 ; Clear RS232 buffer
@@ -188,3 +205,26 @@ ramirq2:
 	sta $01
 	pla
 	rti
+    
+;----------------------------------------------------------------------
+
+delay100:          
+        
+    ldx #00        
+                
+loop_outer:             
+    cpx #10   
+    beq enddelay
+    inx            
+    ldy #00        
+                
+delay_inner:            
+    cpy #255       
+    beq loop_outer    
+    nop            
+    nop            
+    iny            
+    jmp delay_inner
+                
+enddelay:         
+    rts    

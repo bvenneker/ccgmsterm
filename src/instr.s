@@ -1,6 +1,7 @@
 ; CCGMS Terminal
 ;
 ; Copyright (c) 2016,2020, Craig Smith, alwyz. All rights reserved.
+; Changes for Commodore by Bart Venneker and Theo van den Beld, 2026
 ; This project is licensed under the BSD 3-Clause License.
 ;
 ; Instructions and credits
@@ -8,7 +9,7 @@
 
 SET_PETSCII
 txt_instructions1:
-	.byte CLR,10,LTGRAY,15,LOCASE,RED,"   C",ORANGE,"C",YELLOW,"G",GREEN,"M",BLUE,"S",PURPLE,"! ",WHITE,"Term FUTURE ",VERSION,CR,CR
+	.byte CLR,10,LTGRAY,15,LOCASE,RED,"   C",ORANGE,"C",YELLOW,"G",GREEN,"M",BLUE,"S",PURPLE,"! ",WHITE,"for Commodore CommoServe ",VERSION,CR,CR
 	.byte RVSON,YELLOW,"Commands:",RVSOFF,CR,CR
 	.byte BLUE,"C",RED,"=   ",WHITE,"STOP      ",CYAN,"Disconnect.",LTBLUE," (Drop DTR)",CR
 	.byte WHITE,"CTRL J/K       ",LTGREEN,"Dest/Non Dest Cursor",CR
@@ -33,7 +34,7 @@ txt_instructions1:
 
 txt_instructions2:
 	.byte CLR,10,LTGRAY,15,WHITE,"   This Version of CCGMS is based on",CR
-	.byte LOCASE,"        ",RED,"C",ORANGE,"C",YELLOW,"G",GREEN,"M",BLUE,"S",WHITE,"! Term (c) 2016",CR
+	.byte LOCASE,"        ",RED,"C",ORANGE,"C",YELLOW,"G",GREEN,"M",BLUE,"S",PURPLE,"!",WHITE," Term (c) 2016",CR
 	.byte " by Craig Smith, All Rights Reserved.",CR,CR
 	.byte LTGREEN,"This program is open source.",CR
 	.byte "redistribution and use in source and",CR
@@ -42,11 +43,10 @@ txt_instructions2:
 	.byte "of the BSD 3-clause license.",CR
 	.byte "For details, or to contribute, visit:",CR
 	.byte YELLOW," https://github.com/mist64/ccgmsterm",CR,CR
-	.byte PURPLE,"A",LTBLUE,"l",CYAN,"w",LTGREEN,"y",YELLOW,"z",GRAY," would like to thank ",LTGREEN,"the CBM",CR
-	.byte "Hackers Mailing List,",YELLOW," IRC #c64friends,",CR
-	.byte ORANGE,"pcollins/excess, larry/role, xlar54,",CR
-	.byte ORANGE,"and the users of AFTERLIFE BBS who",CR
-	.byte "helped with ",LTRED,"testing, tips, and bugfixes.",CR,CR
+             ;  "1234567890123456789012345678901234567890
+	.byte WHITE,"This release of ",RED,"C",ORANGE,"C",YELLOW,"G",GREEN,"M",BLUE,"S",PURPLE,"!",WHITE," was adapted for",CR
+	.byte       "Commodore International by Bart Venneker"
+	.byte       "and Theo van den Beld.",CR,CR,CR
 	.byte LTGREEN,WHITE,"Press a key...",0
 SET_ASCII
 

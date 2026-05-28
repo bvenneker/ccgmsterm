@@ -1,6 +1,7 @@
 ; CCGMS Terminal
 ;
 ; Copyright (c) 2016,2022, Craig Smith, alwyz, Michael Steil. All rights reserved.
+; Changes for Commodore by Bart Venneker and Theo van den Beld, 2026
 ; This project is licensed under the BSD 3-Clause License.
 ;
 ; Main .s file
@@ -23,7 +24,7 @@
 .import col80_read_scr_chr, col80_read_scr_col
 .export locat, nlocat   ; for 80col
 
-.define VERSION "0.2"
+.define VERSION "1.0"
 
 	.include "declare.inc"
 	.include "encoding.inc"

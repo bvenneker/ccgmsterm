@@ -1,6 +1,7 @@
 ; CCGMS Terminal
 ;
 ; Copyright (c) 2016,2020, Craig Smith, alwyz. All rights reserved.
+; Changes for Commodore by Bart Venneker and Theo van den Beld, 2026
 ; This project is licensed under the BSD 3-Clause License.
 ;
 ; Initialization
@@ -116,18 +117,19 @@ rsopen:
 
 ;----------------------------------------------------------------------
 ercopn:
-	lda drive_present
-	beq :+
-	lda #2;file length      ;open err chan
-	ldx #<filename_i0
-	ldy #>filename_i0
-	jsr setnam
-	lda #15
-	ldx device_disk
-	tay
-	jsr setlfs
-	jsr open
-:	rts
+    rts  ; disabled by Bart for chat64 modem software
+;	lda drive_present
+;	beq :+
+;	lda #2;file length      ;open err chan
+;	ldx #<filename_i0
+;	ldy #>filename_i0
+;	jsr setnam
+;	lda #15
+;	ldx device_disk
+;	tay
+;	jsr setlfs
+;	jsr open
+;:	rts
 
 ;----------------------------------------------------------------------
 init

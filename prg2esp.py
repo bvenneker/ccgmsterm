@@ -10,8 +10,8 @@ import datetime
 import re
 
 n = len(sys.argv)
-inputfile= "/home/bart/GitHub/ccgmsterm/build/ccgmsterm.prg"
-outfolder = "/home/bart/Dropbox/C64 Chat/WiFi_Modem_CHAT64/C64_Chat_400"
+inputfile= "/home/bart/Documenten/GitHub/ccgmsterm/build/ccgmsterm.prg"
+outfolder = "/home/bart/Documenten/GitHub/ChatModem64/ESP32/C64_Chat_400"
 
 
 

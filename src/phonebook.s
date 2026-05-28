@@ -1,6 +1,7 @@
 ; CCGMS Terminal
 ;
 ; Copyright (c) 2016,2020, Craig Smith, alwyz. All rights reserved.
+; Changes for Commodore by Bart Venneker and Theo van den Beld, 2026
 ; This project is licensed under the BSD 3-Clause License.
 ;
 ; Phone Book
@@ -211,10 +212,14 @@ savePhonebook:
   ; send command to cartridge 253, 251, 246
   lda #253
   jsr rs232_put
+  jsr delay100
   lda #251
   jsr rs232_put
+  jsr delay100
   lda #246
   jsr rs232_put
+  jsr delay100
+  
   
   lda #0         
 nextEntry:  
@@ -276,10 +281,13 @@ contLoad:
   ; send command to cartridge 253, 251, 245
   lda #253
   jsr rs232_put
+  jsr delay100
   lda #251
   jsr rs232_put
+  jsr delay100
   lda #245
   jsr rs232_put
+  jsr delay100
       
 waitSTX:              ; look for the stx symbol in the buffer (stx=ascii value 2)
   jsr rs232WaitGet
@@ -1704,3 +1712,27 @@ buffer_input:
 ;----------------------------------------------------------------------
 waittemp:
 	.byte 0
+
+;----------------------------------------------------------------------
+
+delay100:          
+        
+    ldx #00        
+                
+loop_outer:             
+    cpx #10   
+    beq enddelay
+    inx            
+    ldy #00        
+                
+delay_inner:            
+    cpy #255       
+    beq loop_outer    
+    nop            
+    nop            
+    iny            
+    jmp delay_inner
+                
+enddelay:         
+    rts            
+                

@@ -1,6 +1,7 @@
 ; CCGMS Terminal
 ;
 ; Copyright (c) 2016,2020, Craig Smith, alwyz. All rights reserved.
+; Changes for Commodore by Bart Venneker and Theo van den Beld, 2026
 ; This project is licensed under the BSD 3-Clause License.
 ;
 ; Startup message and instructions
@@ -148,11 +149,11 @@ txt_banner0c:	; 80 col version
 	.byte 0
 txt_banner0d:
 	.byte WHITE
-	.byte " Terminal FUTURE ",VERSION," "
+	.byte " For CommoServe ",VERSION," "
 	.byte 0
 
-txt_author:
-	.byte "  by Craig Smith, Alwyz, Michael Steil  "
+txt_author: ; 1234567890123456789012345678901234567890
+	.byte    "  Adapted by BV and TVDB, Commodore 2026 "
 	.byte RVSOFF,DKGRAY,0
 
 txt_banner1a:
