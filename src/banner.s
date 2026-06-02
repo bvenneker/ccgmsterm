@@ -149,11 +149,11 @@ txt_banner0c:	; 80 col version
 	.byte 0
 txt_banner0d:
 	.byte WHITE
-	.byte " For CommoServe ",VERSION," "
+	.byte " For Commodore Chat64"
 	.byte 0
 
 txt_author: ; 1234567890123456789012345678901234567890
-	.byte    "  Adapted by BV and TVDB, Commodore 2026 "
+	.byte    " Adapted by Bart and Theo. (c)2026  V",VERSION
 	.byte RVSOFF,DKGRAY,0
 
 txt_banner1a:
@@ -187,7 +187,7 @@ txt_banner1d:
 tcol7:	.byte WHITE
 	.byte "  ",RVSON,"F7",RVSOFF," "
 tcol8:	.byte GREEN
-	.byte "Dialer/Params   "
+	.byte "Dialer/Phonebk. "
 tcol15:	.byte WHITE
 	.byte RVSON,"F8",RVSOFF," "
 tcol16:	.byte GREEN
@@ -228,8 +228,9 @@ tcol26d	.byte RED
 tcol24	.byte WHITE
 	.byte RVSON,"F7",RVSOFF," "
 tcol25	.byte LTBLUE
-	.byte "Screen to Buff.",CR,CR,0
+	.byte "Screen to Buff.",CR,BLUE,"C",RED,"=",RVSON,WHITE," S",RVSOFF,BLUE," Settings      "
+    .byte BLUE,"C",RED,"=",RVSON,WHITE," I",RVSOFF,BLUE," Instructions",CR,CR,0
 
 mlswrn:	; [XXX code that uses this is commented out]
-	.byte CR,WHITE,"Buffer too big - Save or Clear First!",CR,0
+	.byte CR,WHITE,"Buffer too big - Save or Clear First!",CR,CR,0
 SET_ASCII

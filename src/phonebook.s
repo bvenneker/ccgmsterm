@@ -16,7 +16,7 @@ txt_phonebook_menu:
 	.byte WHITE,RVSON,$a1	; $A1: LEFT HALF BLOCK ('▌')
 	.byte "CRSR Keys"
 	.byte $b6,RVSOFF,LTBLUE	; $B6: RIGHT THREE EIGHTHS BLOCK
-	.byte " - Move"
+	.byte " - Move "
 	.byte WHITE,RVSON,$a1
 	.byte "Return"
 	.byte $b6,RVSOFF,LTBLUE
@@ -356,7 +356,7 @@ done:
         
 ;---------------------------------------------------------------------------           
 phonebook_init:   
-    jsr loadSpeedDials 
+;    jsr loadSpeedDials 
 	lda #'0'
 	sta trycnt
 	sta trycnt+1
@@ -1009,7 +1009,7 @@ phb5:
 
 	and #$7f
 	cmp #'X'	; return to menu
-	jeq handle_f7_config
+	jeq term_entry ;handle_f7_config
 
 	cmp #' '
 	beq :+

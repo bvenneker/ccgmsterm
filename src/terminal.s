@@ -78,8 +78,18 @@ term_mainloop:
 
 	jsr clrchn
 	jsr getin	; get character from keyboard
+    
+    
 	cmp #0
 	jeq @input_loop	; skip output code
+    cmp #9 ; cmb+i is pressed
+    bne :+
+    jsr show_instructions
+    jmp term_entry
+:   cmp #19 ; cmb+s is pressed
+    bne :+
+    jmp handle_f7_config       
+:     
 
 .if 0	; [XXX I don't think this makes sense any more]
 ; cbm-ctrl-f: reset/init user port RS-232
@@ -163,7 +173,7 @@ term_mainloop:
 	jmp handle_f1_upload
 	jmp handle_f3_download
 	jmp handle_f5_diskcommand
-	jmp handle_f7_config
+    jmp phonebook ;	jmp handle_f7_config
 	jmp handle_f2_send_read
 	jmp handle_f4_buffer
 	jmp handle_f6_directory
@@ -221,7 +231,7 @@ term_mainloop:
 ; modem input
 @input_loop:
 	jsr clrchn
-
+    
 ; macro printing
 	ldx SHFLAG
 	cpx #SHFLAG_CTRL; ctrl pressed
@@ -237,15 +247,15 @@ term_mainloop:
 	jmp @loop1
 :
 
-.if 0	; charset switching [XXX this has no effect ever]
-	cpx #SHFLAG_SHIFT | SHFLAG_CBM
-	bne :+
-	ldx MODE	; charset switching allowed?
-	bpl :+		; no
-	ldx #$17
-	stx $d018	; set lowercase charset
-:
-.endif
+;.if 0	; charset switching [XXX this has no effect ever]
+;	cpx #SHFLAG_SHIFT | SHFLAG_CBM
+;	bne :+
+;	ldx MODE	; charset switching allowed?
+;	bpl :+		; no
+;	ldx #$17
+;	stx $d018	; set lowercase charset
+;:
+;.endif
 
 ; modem input
 	jsr rs232_get

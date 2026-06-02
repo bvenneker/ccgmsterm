@@ -14,24 +14,26 @@ handle_f7_config:
 	lda #0
 	sta $d020
 	sta $d021
+    
 	lda #<txt_settings_menu
 	ldy #>txt_settings_menu
 	jsr outstr
-	lda easyflash_support
-	beq @1
-	lda #<txt_edit_macros_cfg_device
-	ldy #>txt_edit_macros_cfg_device
-	jsr outstr
-	jmp @2
+;	lda easyflash_support
+;	beq @1
+;	lda #<txt_edit_macros_cfg_device
+;	ldy #>txt_edit_macros_cfg_device
+;	jsr outstr
+;	jmp @2
 @1:	lda #<txt_edit_macros
 	ldy #>txt_edit_macros
 	jsr outstr
-@2:	lda #<txt_load_save_config
-	ldy #>txt_load_save_config
-	jsr outstr
-	lda #<txt_press_return_to_abort
-	ldy #>txt_press_return_to_abort
-	jsr outstr
+@2:	
+;    lda #<txt_load_save_config
+;	ldy #>txt_load_save_config
+;	jsr outstr
+;	lda #<txt_press_return_to_abort
+;	ldy #>txt_press_return_to_abort
+;	jsr outstr
 
 config_loop:
 	jsr f7parm
@@ -42,14 +44,14 @@ f7chos
 	lda JIFFIES
 	and #$10
 	beq f7oprt
-	lda #<txt_press_return_to_abort
-	ldy #>txt_press_return_to_abort
-	jsr outstr
+;	lda #<txt_press_return_to_abort
+;	ldy #>txt_press_return_to_abort
+;	jsr outstr
 	jmp f7chgk
 f7oprt
-	lda #<txt_return
-	ldy #>txt_return
-	jsr outstr
+;	lda #<txt_return
+;	ldy #>txt_return
+;	jsr outstr
 f7chgk
 	jsr getin
 	cmp #0
@@ -57,65 +59,65 @@ f7chgk
 
 ; A: auto-dial
 	and #$7f
-	cmp #'A'
-	bne @no1
-
-	lda baud_rate
-	sta bautmp
-	lda ascii_mode
-	sta gratmp
-	jmp phonebook
+;	cmp #'A'
+;	bne @no1
+;
+;	lda baud_rate
+;	sta bautmp
+;	lda ascii_mode
+;	sta gratmp
+;	jmp phonebook
 @no1:
 
 ; B: Baud Rate
-	cmp #'B'
-	bne @no2
-
-	ldy modem_type
-	beq @baud1	; MODEM_TYPE_USERPORT
-	cpy #MODEM_TYPE_UP9600
-	beq @baud2
-	cpy #MODEM_TYPE_SWIFTLINK_DF; skip REU if there's SwiftLink at $DF00
-	bne @inc
-	jsr noreu
-	jmp @inc
-@baud1:	lda baud_rate
-	cmp #BAUD_2400
-	bmi @inc
-	jmp @reset
-@baud2:	lda baud_rate
-	cmp #BAUD_9600
-	bmi @inc
-	jmp @reset
-@inc:	inc baud_rate
-	lda baud_rate
-	cmp #BAUD_38400+1
-	bne :+
-@reset:	lda #BAUD_300
-	sta baud_rate
-:	jsr rsopen	;5-16 add failsafe....
-	jmp config_loop
+;	cmp #'B'
+;	bne @no2
+;
+;	ldy modem_type
+;	beq @baud1	; MODEM_TYPE_USERPORT
+;	cpy #MODEM_TYPE_UP9600
+;	beq @baud2
+;	cpy #MODEM_TYPE_SWIFTLINK_DF; skip REU if there's SwiftLink at $DF00
+;	bne @inc
+;	jsr noreu
+;	jmp @inc
+;@baud1:	lda baud_rate
+;	cmp #BAUD_2400
+;	bmi @inc
+;	jmp @reset
+;@baud2:	lda baud_rate
+;	cmp #BAUD_9600
+;	bmi @inc
+;	jmp @reset
+;@inc:	inc baud_rate
+;	lda baud_rate
+;	cmp #BAUD_38400+1
+;	bne :+
+;@reset:	lda #BAUD_300
+;	sta baud_rate
+;:	jsr rsopen	;5-16 add failsafe....
+;	jmp config_loop
 @no2:
 
 ; D: Duplex
-	cmp #'D'
-	bne @no3
-
-	lda half_duplex
-	eor #1
-	sta half_duplex
-	jmp config_loop
+;	cmp #'D'
+;	bne @no3
+;
+;	lda half_duplex
+;	eor #1
+;	sta half_duplex
+;	jmp config_loop
 @no3:
 
 ; F: Firmware
-    jmp @no4
-	cmp #'F'
-	bne @no4
-
-	lda firmware_zimmers
-	eor #1
-	sta firmware_zimmers
-	jmp config_loop
+;    jmp @no4
+;	cmp #'F'
+;	bne @no4
+;
+;	lda firmware_zimmers
+;	eor #1
+;	sta firmware_zimmers
+;	jmp config_loop
 @no4:
 
 ; T: theme
@@ -132,57 +134,55 @@ f7chgk
 @no5:
 
 ; C: Config EF/Disk (EasyFlash only)
-	cmp #'C'
-	bne @no6
-	lda easyflash_support
-	beq @no6
-	lda easyflash_use_disk
-	eor #1
-	sta easyflash_use_disk
-	jmp config_loop
+;	cmp #'C'
+;	bne @no6
+;	lda easyflash_support
+;	beq @no6
+;	lda easyflash_use_disk
+;	eor #1
+;	sta easyflash_use_disk
+;	jmp config_loop
 @no6:
 
 ; M: modem type
 
-    jmp @no7    ; changing Modem is disabled by Chat64
-	cmp #'M'
-	bne @no7
+;    jmp @no7    ; changing Modem is disabled by Chat64;
+;	cmp #'M'
+;	bne @no7
 
 ; return to basic
         
-  jsr $a642
-  lda #7
-  sta $d020
-  lda #14
-  sta $d021
-  jsr $E518
-  jmp $A483
+;  jsr $a642
+;  lda #7
+;  sta $d020
+;  lda #14
+; sta $d021
+; jsr $E518
+;  jmp $A483
+;   
+;	inc modem_type
+;	lda modem_type
+;	pha
+;	lda easyflash_support
+;	beq @mod1
+;	pla
+;	cmp #2		; only 2 modems in easyflash mode
+;	bcc @incmod
+;	jmp @mod2
+;@mod1:	pla
+;	cmp #6		; max # of modems
+;	bcc @incmod
+;@mod2:	lda #0
+;	sta modem_type
+;	lda #BAUD_2400
+;	sta baud_rate
+;@incmod:
+;	jsr rsopen
+;	jmp config_loop
     
-
-
-	inc modem_type
-	lda modem_type
-	pha
-	lda easyflash_support
-	beq @mod1
-	pla
-	cmp #2		; only 2 modems in easyflash mode
-	bcc @incmod
-	jmp @mod2
-@mod1:	pla
-	cmp #6		; max # of modems
-	bcc @incmod
-@mod2:	lda #0
-	sta modem_type
-	lda #BAUD_2400
-	sta baud_rate
-@incmod:
-	jsr rsopen
-	jmp config_loop
 @no7:
 
 ; P: Protocol
-    ;jmp @no8
 	cmp #'P'
 	bne @no8
 
@@ -193,26 +193,12 @@ f7chgk
 	lda #0
 	sta protoc
 :	jmp config_loop
+
 @no8:
-
-; S: save
-    jmp @no9
-;	cmp #'S'
-;	bne @no9
-;	jsr save_config
-;	jmp handle_f7_config
 @no9:
-
-; L: load
-    jmp @no10
-;	cmp #'L'
-;	bne @no10
-;	jsr load_config
-;	jmp handle_f7_config
 @no10:
 
 ; E: edit macros
-    jmp @no11
 	cmp #'E'
 	bne @no11
 	jsr edtmac
@@ -226,10 +212,13 @@ f7chgk
 	jmp handle_f7_config
 @no12:
 
-	cmp #CR
+	cmp #'R'        ; return to terminal when R is pressed
+    beq @return     
+    cmp #CR         ; also when RETURN is pressed, return to terminal
 	jne f7chos
 
 ; return to terminal
+@return
 	lda nicktemp	; [XXX no-op]
 	beq *+2		; [XXX no-op]
 
@@ -243,10 +232,10 @@ prmopt:
 	.word op6txt
 	.word op3txt
 	.word op4txt
-	.word op5txt
+;	.word op5txt
 
 prmlen:
-	.byte 4,18,8,10,20,19
+	.byte 4,18,8,11,21,19
 
 ;----------------------------------------------------------------------
 SET_PETSCII
@@ -267,24 +256,24 @@ op6txt:
 	.byte "Zimodem "
 
 op3txt:
-	.byte "Punter    "
-	.byte "XMODEM    "
-	.byte "XMODEM-CRC"
-	.byte "XMODEM-1K "
+	.byte YELLOW,"Punter    "
+	.byte YELLOW,"XMODEM    "
+	.byte YELLOW,"XMODEM-CRC"
+	.byte YELLOW,"XMODEM-1K "
 
 op4txt:
-	.byte "Classic CCGMS v5.5  "
-	.byte "Iman / XPB v7.1     "
-	.byte "Predator / FCC v8.1 "
-	.byte "Ice theme v9.4      "
-	.byte "Defcon/Unicess v17.2"
-	.byte "Alwyz / CCGMS 2021  "
+	.byte GREEN,"Classic CCGMS v5.5  "
+	.byte GREEN,"Iman / XPB v7.1     "
+	.byte GREEN,"Predator / FCC v8.1 "
+	.byte GREEN,"Ice theme v9.4      "
+	.byte GREEN,"Defcon/Unicess v17.2"
+	.byte GREEN,"Alwyz / CCGMS 2021  "
 
-op5txt:
-	.res 15,CSR_RIGHT
-	.byte "EF  "
-	.res 15,CSR_RIGHT
-	.byte "Disk"
+;op5txt:
+;	.res 15,CSR_RIGHT
+;	.byte "EF  "
+;	.res 15,CSR_RIGHT
+;	.byte "Disk"
 SET_ASCII
 
 ;----------------------------------------------------------------------
@@ -292,7 +281,7 @@ prmtab:
 	lda #CR
 	jsr chrout
 	jsr chrout
-	ldx #17
+	ldx #16
 	jmp outspc
 
 ; display duplex, modem type, protocol
@@ -364,6 +353,8 @@ f7parm:
 	jsr prmclc
 	ldx firmware_zimmers
 	jsr prmprt
+    jsr prmtab
+    jsr prmtab   
 	ldy #3
 	jsr prmclc
 	ldx protoc
@@ -395,36 +386,33 @@ f7thob:
 	.byte 2
 
 txt_settings_menu:
-	.byte CLR,16,LOCASE,WHITE
-	.byte "   Dialer/Parameters",CR
-	.byte BLUE,"   "
-	.res 17,$a3	; $A3: UPPER ONE EIGHTH BLOCK ('▔')
+	.byte CLR,16,LOCASE
 	.byte CR,WHITE,16
-tcol27a	.byte WHITE
-	.byte " ",HILITE,"auto-Dialer/Phonebook",CR,CR
-	.byte " ",WHITE,"baud Rate   -",CR,CR
-	.byte " ",WHITE,"duplex      -",CR,CR
-	.byte " ",WHITE,"modem Type  -",CR,CR
-	.byte " ",WHITE,"f"
+tcol27a	.byte YELLOW
+	.byte "Fixed settings:",CR
+    .byte BLUE
+	.res 16,$a3	; $A3: UPPER ONE EIGHTH BLOCK ('▔')
+	.byte CR,CR,WHITE,"Baud Rate   -",CR,CR
+	.byte WHITE,"Duplex      -",CR,CR
+	.byte WHITE,"Modem Type  -",CR,CR
+	.byte WHITE,"F"
 tcol27b	.byte " "
 	.byte "irmware    -",CR,CR
-	.byte " ",HILITE,"protocol    -",CR,CR
+
+     .byte WHITE
+	.byte CR,CR,"Setup/Parameters",CR
+	.byte BLUE
+	.res 16,$a3	; $A3: UPPER ONE EIGHTH BLOCK ('▔')
+    
+	.byte CR,WHITE," ",HILITE,"protocol    -",CR,CR
 	.byte " ",HILITE,"theme       -",CR,CR,0
 
 txt_edit_macros:
-	.byte " ",BLACK,"edit Macros",CR,CR,WHITE,0
-txt_edit_macros_cfg_device:
-	.byte " ",HILITE,"edit Macros   ",HILITE,"cfg Device -",CR,CR,0
+	.byte " ",HILITE,"edit Macros",CR,CR,WHITE
+    .byte " ",HILITE,"r",WHITE,"eturn to terminal",CR,CR,WHITE,0
 
-txt_load_save_config:
-	.byte " ",BLACK,"load/",BLACK,"save Phone Book and Config.",CR,CR
-	.byte " ",WHITE,HILITE,"view Instructions",CR,CR,0
 
-txt_press_return_to_abort:
-	.byte SETCSR,22,0,WHITE,"Press <",YELLOW,RVSON,"RETURN",RVSOFF,WHITE,"> to abort.",CR,0
 
-txt_return:
-	.byte SETCSR,22,7,CYAN,"RETURN",CR,0
 SET_ASCII
 
 ;----------------------------------------------------------------------
