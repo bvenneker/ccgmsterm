@@ -82,11 +82,11 @@ term_mainloop:
     
 	cmp #0
 	jeq @input_loop	; skip output code
-    cmp #9 ; cmb+i is pressed
+    cmp #162 ; cmb+i is pressed
     bne :+
     jsr show_instructions
     jmp term_entry
-:   cmp #19 ; cmb+s is pressed
+:   cmp #174 ; cmb+s is pressed
     bne :+
     jmp handle_f7_config       
 :     

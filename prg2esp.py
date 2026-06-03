@@ -10,9 +10,15 @@ import datetime
 import re
 
 n = len(sys.argv)
-inputfile= "/home/bart/Documenten/GitHub/ccgmsterm/build/ccgmsterm.prg"
-outfolder = "/home/bart/Documenten/GitHub/ChatModem64/ESP32/C64_Chat_400"
 
+if os.path.isdir("/home/bart/Documenten/GitHub"):
+    inputfile= "/home/bart/Documenten/GitHub/ccgmsterm/build/ccgmsterm.prg"
+    outfolder = "/home/bart/Documenten/GitHub/ChatModem64/ESP32/C64_Chat_400"
+
+else:
+    inputfile= "/home/bart/GitHub/ccgmsterm/build/ccgmsterm.prg"
+    outfolder = "/home/bart/GitHub/ChatModem64/ESP32/C64_Chat_400"
+ 
 
 
 outputfile = outfolder + "/prgfile_m.h"

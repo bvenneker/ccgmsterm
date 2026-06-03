@@ -355,8 +355,10 @@ done:
         rts
         
 ;---------------------------------------------------------------------------           
-phonebook_init:   
-;    jsr loadSpeedDials 
+phonebook_init:
+    lda #23
+    sta $D018
+    jsr loadSpeedDials 
 	lda #'0'
 	sta trycnt
 	sta trycnt+1
